@@ -204,11 +204,12 @@ def cfg_text(r):
     ] if x)
 
 
-def latest_table(rows, limit=30):
+def latest_table(rows):
+    # latest.md 输出当日全部在售条目（index.html 的 60 条上限在 main() 中单独控制）
     last = max((r['date'] for r in rows), default='')
     items = items_sorted(rows)
     lines = ['| 型号 | 芯片 | 配置 | 价格 | 链接 |', '|---|---|---|---|---|']
-    for r in items[:limit]:
+    for r in items:
         lines.append(f"| {r['category']} | {r.get('chip') or '?'} | {cfg_text(r)} | ¥{r['price']:,} | "
                      f"[商品]({r['url']}) |")
     return last, lines
