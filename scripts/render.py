@@ -2,17 +2,22 @@
 """从 data/*.json 生成 history.csv、chart_price.svg、chart_stock.svg、index.html、README.md。
 
 用法: python3 scripts/render.py
+
+图表按「配置组」聚合：配置 = category + chip + cpuCores + gpuCores + memoryGB + storage。
+折线图为每日快照时间序列（某天该配置出现/消失即断点）。
+最近一天在售数量 TOP 12 配置组各一条线，其余聚合为「其他」线。
 """
 import csv
 import glob
 import json
 import os
-from datetime import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, 'data')
 MODELS = ['Mac Studio', 'Mac mini', 'MacBook Pro']
-COLORS = {'Mac Studio': '#2563eb', 'Mac mini': '#059669', 'MacBook Pro': '#d97706'}
+TOP_N = 12
+PALETTE = ['#2563eb', '#059669', '#d97706', '#dc2626', '#7c3aed', '#0891b2',
+           '#db2777', '#65a30d', '#ea580c', '#4f46e5', '#0d9488', '#a16207', '#6b7280']
 
 
 def load():
@@ -30,6 +35,64 @@ def esc(s):
     return str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
 
 
+def config_key(r):
+    """配置组唯一键：产品线 + 芯片 + CPU/GPU 核数 + 内存 + 硬盘。"""
+    return (r.get('category') or '?', r.get('chip') or '?', r.get('cpuCores'),
+            r.get('gpuCores'), r.get('memoryGB'), r.get('storage') or '?')
+
+
+def config_label(key):
+    """配置组显示标签：如 MacBook Pro M5 Pro 18/20 24GB/2TB；缺失字段用 ? 占位。"""
+    cat, chip, cpu, gpu, mem, sto = key
+    return (f"{cat} {chip} "
+            f"{cpu if cpu is not None else '?'}/{gpu if gpu is not None else '?'} "
+            f"{mem if mem is not None else '?'}GB/{sto}")
+
+
+def series_by_config(rows):
+    """按配置组聚合每日（在售最低价, 在售条目数）。
+
+    排序规则：最近一天在售数量降序 → 历史总次数降序 → 标签字典序。
+    TOP 12 各一条线，其余聚合为「其他」（价格取最低、数量求和）。
+    """
+    dates = sorted({r['date'] for r in rows})
+    last = dates[-1] if dates else ''
+    price_by = {d: {} for d in dates}
+    count_by = {d: {} for d in dates}
+    total_count = {}
+    for r in rows:
+        k = config_key(r)
+        d = r['date']
+        p = price_by[d].get(k)
+        price_by[d][k] = r['price'] if p is None else min(p, r['price'])
+        count_by[d][k] = count_by[d].get(k, 0) + 1
+        total_count[k] = total_count.get(k, 0) + 1
+    last_counts = count_by.get(last, {})
+    keys = sorted(total_count,
+                  key=lambda k: (-last_counts.get(k, 0), -total_count[k], config_label(k)))
+    top, other = keys[:TOP_N], keys[TOP_N:]
+
+    def pick(ks, agg):
+        out = {}
+        for k in ks:
+            label = config_label(k)
+            out[label] = {d: agg(price_by[d].get(k), count_by[d].get(k))
+                          for d in dates if k in count_by[d]}
+        return out
+
+    series_p = pick(top, lambda p, c: p)
+    series_c = pick(top, lambda p, c: c)
+    if other:
+        label = f'其他（{len(other)} 组）'
+        series_p[label], series_c[label] = {}, {}
+        for d in dates:
+            ps = [price_by[d][k] for k in other if k in price_by[d]]
+            if ps:
+                series_p[label][d] = min(ps)
+                series_c[label][d] = sum(count_by[d][k] for k in other if k in count_by[d])
+    return dates, series_p, series_c
+
+
 def write_history(rows):
     path = os.path.join(ROOT, 'history.csv')
     cols = ['date', 'category', 'chip', 'cpuCores', 'gpuCores', 'memoryGB', 'storage',
@@ -42,21 +105,9 @@ def write_history(rows):
     return path
 
 
-def series_by_date(rows):
-    dates = sorted({r['date'] for r in rows})
-    prices, counts = {}, {}
-    for model in MODELS:
-        prices[model], counts[model] = {}, {}
-        for d in dates:
-            vals = [r['price'] for r in rows if r['date'] == d and r['category'] == model]
-            if vals:
-                prices[model][d] = min(vals)
-                counts[model][d] = len(vals)
-    return dates, prices, counts
-
-
-def line_chart(dates, series, title, y_label, out_path, fmt_money=True, width=920, height=380):
-    pad_l, pad_r, pad_t, pad_b = 78, 130, 52, 46
+def line_chart(dates, series, title, y_label, out_path, fmt_money=True,
+               width=1140, height=420):
+    pad_l, pad_r, pad_t, pad_b = 78, 296, 52, 46
     plot_w, plot_h = width - pad_l - pad_r, height - pad_t - pad_b
     vals = [v for s in series.values() for v in s.values()]
     if not vals or not dates:
@@ -92,11 +143,12 @@ def line_chart(dates, series, title, y_label, out_path, fmt_money=True, width=92
         if i % step == 0 or i == len(dates) - 1:
             svg.append(f'<text x="{x(i):.1f}" y="{pad_t + plot_h + 20}" font-size="10" fill="#6b7280" '
                        f'text-anchor="middle">{esc(d[5:])}</text>')
-    # 折线
-    for model, s in series.items():
+    # 折线（每种配置一个颜色；当日无在售即断点，不连线）
+    for idx, (label, s) in enumerate(series.items()):
+        color = PALETTE[idx % len(PALETTE)]
         pts = [(x(i), y(s[d])) for i, d in enumerate(dates) if d in s]
         if len(pts) == 1:
-            svg.append(f'<circle cx="{pts[0][0]:.1f}" cy="{pts[0][1]:.1f}" r="4" fill="{COLORS[model]}"/>')
+            svg.append(f'<circle cx="{pts[0][0]:.1f}" cy="{pts[0][1]:.1f}" r="4" fill="{color}"/>')
             continue
         seg = None
         for i, d in enumerate(dates):
@@ -105,20 +157,21 @@ def line_chart(dates, series, title, y_label, out_path, fmt_money=True, width=92
             else:
                 if seg and len(seg) > 1:
                     svg.append('<polyline fill="none" stroke="%s" stroke-width="2" points="%s"/>'
-                               % (COLORS[model], ' '.join(f'{a:.1f},{b:.1f}' for a, b in seg)))
+                               % (color, ' '.join(f'{a:.1f},{b:.1f}' for a, b in seg)))
                 seg = None
         if seg and len(seg) > 1:
             svg.append('<polyline fill="none" stroke="%s" stroke-width="2" points="%s"/>'
-                       % (COLORS[model], ' '.join(f'{a:.1f},{b:.1f}' for a, b in seg)))
-        svg.append(f'<text x="{pad_l + 10}" y="{pad_t + plot_h - 6}" font-size="1" fill="none">{esc(model)}</text>')
-    # 图例
+                       % (color, ' '.join(f'{a:.1f},{b:.1f}' for a, b in seg)))
+    # 图例（右侧，带最新值）
     ly = pad_t + 6
-    for model in MODELS:
-        svg.append(f'<rect x="{width - pad_r + 10}" y="{ly}" width="10" height="10" rx="2" fill="{COLORS[model]}"/>')
-        last = series.get(model, {})
-        lastv = last.get(dates[-1]) if dates else None
-        text = f'{model} ¥{lastv:,.0f}' if lastv else f'{model} —'
-        svg.append(f'<text x="{width - pad_r + 26}" y="{ly + 9}" font-size="10" fill="#374151">{esc(text)}</text>')
+    for idx, (label, s) in enumerate(series.items()):
+        color = PALETTE[idx % len(PALETTE)]
+        svg.append(f'<rect x="{width - pad_r + 10}" y="{ly}" width="10" height="10" rx="2" fill="{color}"/>')
+        lastv = s.get(dates[-1]) if dates else None
+        suffix = f'¥{lastv:,.0f}' if (fmt_money and lastv is not None) else (
+            f'{lastv:,}' if lastv is not None else '—')
+        svg.append(f'<text x="{width - pad_r + 26}" y="{ly + 9}" font-size="10" fill="#374151">'
+                   f'{esc(label)} {suffix}</text>')
         ly += 20
     svg.append(f'<text x="{pad_l}" y="{height - 10}" font-size="10" fill="#9ca3af">{esc(y_label)}</text>')
     svg.append('</svg>')
@@ -127,27 +180,36 @@ def line_chart(dates, series, title, y_label, out_path, fmt_money=True, width=92
     return out_path
 
 
+def item_sort_key(z):
+    """产品线 → 芯片 → CPU/GPU → 内存 → 硬盘 → 价格，保证同配置相邻、顺序稳定。"""
+    return (MODELS.index(z['category']) if z['category'] in MODELS else 9,
+            z.get('chip') or '', z.get('cpuCores') or -1, z.get('gpuCores') or -1,
+            z.get('memoryGB') or -1, z.get('storage') or '', z['price'])
+
+
 def items_sorted(rows):
     last = max((r['date'] for r in rows), default='')
     items = [r for r in rows if r['date'] == last]
-    items.sort(key=lambda z: (MODELS.index(z['category']) if z['category'] in MODELS else 9, z['price']))
+    items.sort(key=item_sort_key)
     return items
+
+
+def cfg_text(r):
+    return ' / '.join(x for x in [
+        f"{r.get('cpuCores') or '?'}核CPU",
+        f"{r.get('gpuCores') or '?'}核GPU",
+        f"{r.get('memoryGB') or '?'}GB",
+        r.get('storage') or '?',
+        (f"{r['screenInch']}英寸" if r.get('screenInch') else ''),
+    ] if x)
 
 
 def latest_table(rows, limit=30):
     last = max((r['date'] for r in rows), default='')
-    items = [r for r in rows if r['date'] == last]
-    items.sort(key=lambda z: (MODELS.index(z['category']) if z['category'] in MODELS else 9, z['price']))
+    items = items_sorted(rows)
     lines = ['| 型号 | 芯片 | 配置 | 价格 | 链接 |', '|---|---|---|---|---|']
     for r in items[:limit]:
-        cfg = ' / '.join(x for x in [
-            f"{r.get('cpuCores') or '?'}核CPU",
-            f"{r.get('gpuCores') or '?'}核GPU",
-            f"{r.get('memoryGB') or '?'}GB",
-            r.get('storage') or '?',
-            (f"{r['screenInch']}英寸" if r.get('screenInch') else ''),
-        ] if x)
-        lines.append(f"| {r['category']} | {r.get('chip') or '?'} | {cfg} | ¥{r['price']:,} | "
+        lines.append(f"| {r['category']} | {r.get('chip') or '?'} | {cfg_text(r)} | ¥{r['price']:,} | "
                      f"[商品]({r['url']}) |")
     return last, lines
 
@@ -158,12 +220,13 @@ def main():
         print('没有数据，先跑 scripts/scrape.py')
         return 1
     write_history(rows)
-    dates, prices, counts = series_by_date(rows)
-    line_chart(dates, prices, '苹果官翻 · 在售最低价走势（按产品线）',
-               '注：官翻价格为苹果官方定价；曲线断点表示当日该产品线无在售翻新机。',
+    dates, prices, counts = series_by_config(rows)
+    line_chart(dates, prices, '苹果官翻 · 在售最低价走势（按配置组 TOP 12 + 其他）',
+               '注：按配置分组，仅展示最近一天在售数量 TOP 12，其余聚合为「其他」；'
+               '曲线断点表示当日该配置无在售翻新机。',
                os.path.join(ROOT, 'chart_price.svg'))
-    line_chart(dates, counts, '苹果官翻 · 在售数量走势（按产品线）',
-               '注：数量 = 当日该产品线在售翻新机条目数，反映补货/售罄节奏。',
+    line_chart(dates, counts, '苹果官翻 · 在售数量走势（按配置组 TOP 12 + 其他）',
+               '注：数量 = 当日该配置组在售条目数；「其他」为 TOP 12 以外配置组的数量之和。',
                os.path.join(ROOT, 'chart_stock.svg'), fmt_money=False)
     last, table = latest_table(rows)
     with open(os.path.join(ROOT, 'latest.md'), 'w', encoding='utf-8') as f:
@@ -171,13 +234,7 @@ def main():
     # index.html（静态，GitHub 直接可看；也可作为 GitHub Pages 首页）
     rows_html = ['<table><tr><th>型号</th><th>芯片</th><th>配置</th><th>价格</th><th>链接</th></tr>']
     for r in items_sorted(rows)[:60]:
-        cfg = ' / '.join(x for x in [
-            f"{r.get('cpuCores') or '?'}核CPU",
-            f"{r.get('gpuCores') or '?'}核GPU",
-            f"{r.get('memoryGB') or '?'}GB",
-            r.get('storage') or '?',
-            (f"{r['screenInch']}英寸" if r.get('screenInch') else ''),
-        ] if x)
+        cfg = cfg_text(r)
         rows_html.append(f"<tr><td>{esc(r['category'])}</td><td>{esc(r.get('chip') or '?')}</td>"
                          f"<td>{esc(cfg)}</td><td>¥{r['price']:,}</td>"
                          f"<td><a href='{esc(r['url'])}'>商品</a></td></tr>")
@@ -206,6 +263,12 @@ th{{background:#f9fafb}}code{{background:#f3f4f6;padding:1px 4px;border-radius:4
 - 数据：<code>data/YYYY-MM-DD.json</code>（每日快照）、<code>history.csv</code>（汇总）
 - 生成物：<code>chart_price.svg</code> / <code>chart_stock.svg</code>（GitHub 内嵌渲染）、<code>index.html</code>
 
+## 图表怎么看
+
+- 图表**按配置分组**：配置 = 产品线 + 芯片 + CPU/GPU 核数 + 内存 + 硬盘（如 <code>MacBook Pro M5 Pro 18/20 24GB/2TB</code>），不同颜色各一条折线。
+- 为避免图例爆炸，只画**最近一天在售数量 TOP 12** 的配置组，其余配置聚合为一条灰色的「其他」线（价格取最低、数量求和）。TOP 12 每天可能轮换。
+- <code>chart_price.svg</code> = 各配置组当日在售最低价；<code>chart_stock.svg</code> = 各配置组当日在售条目数。曲线断点表示当日该配置无在售翻新机。
+
 ## 价格走势（在售最低价）
 
 ![价格走势](chart_price.svg)
@@ -220,13 +283,14 @@ th{{background:#f9fafb}}code{{background:#f3f4f6;padding:1px 4px;border-radius:4
 
 ## 说明
 
-- 官翻价为苹果官方定价，通常不变；波动主要来自**在售型号更替与补货/售罄**，因此同时记录价格与在售数量。
+- 官翻价为苹果官方定价，通常不变；波动主要来自**在售配置更替与补货/售罄**，因此同时记录价格与在售数量。
+- 清单按 产品线 → 芯片 → CPU/GPU → 内存 → 硬盘 → 价格 排序，同配置相邻。
 - 抓取：Tabbit Browser CLI 渲染页面 → 解析商品卡（价格格式 `RMB 15,599`）。
 - 抓取脚本 <code>scripts/scrape.py</code>，渲染脚本 <code>scripts/render.py</code>；纯本地运行，无第三方依赖。
 '''
     with open(os.path.join(ROOT, 'README.md'), 'w', encoding='utf-8') as f:
         f.write(readme)
-    print(f'rendered: {len(rows)} rows, {len(dates)} days, last={last}')
+    print(f'rendered: {len(rows)} rows, {len(dates)} days, {len(prices)} series, last={last}')
     return 0
 
 
