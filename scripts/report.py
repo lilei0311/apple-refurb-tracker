@@ -132,7 +132,7 @@ def build_report(data_dir):
     if base_str is None:
         # 基线日：只有 1 天数据，明确说明、不编造
         lines = [
-            f"**{today_str[5:]}** 在售 {len(today_items)} 条：{cat_txt}（基线日，无对比）",
+            f"**{today_str[5:]}** 在售 {len(today_items)} 条（按条数降序）：{cat_txt}（基线日，无对比）",
             '新上架：无对比数据（基线日）',
             '下架：无对比数据（基线日）',
             '价格变化：无对比数据（基线日）',
@@ -192,7 +192,7 @@ def build_report(data_dir):
             verdict = '平稳（价格有变动）'
 
         lines = [
-            f"**{today_str[5:]}** 在售 {len(today_items)} 条：{cat_txt}（{base_note}）",
+            f"**{today_str[5:]}** 在售 {len(today_items)} 条（按条数降序）：{cat_txt}（{base_note}）",
             f"新上架：{listing(new_keys, True)}",
             f"下架：{listing(gone_keys, False)}",
             f"价格变化：{change_txt}",
