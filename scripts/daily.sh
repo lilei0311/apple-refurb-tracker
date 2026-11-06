@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 
 TODAY=$(date +%F)
 if [ -f "data/$TODAY.json" ]; then
-  echo "今日（$TODAY）数据已存在，跳过抓取（幂等）"
+  echo "今日（${TODAY}）数据已存在，跳过抓取（幂等）"
   exit 0
 fi
 
