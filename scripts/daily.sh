@@ -3,6 +3,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+TODAY=$(date +%F)
+if [ -f "data/$TODAY.json" ]; then
+  echo "今日（$TODAY）数据已存在，跳过抓取（幂等）"
+  exit 0
+fi
+
 if ! pgrep -f "Tabbit Browser.app/Contents/MacOS/Tabbit Browser" >/dev/null 2>&1; then
   echo "Tabbit 未运行，尝试启动…"
   open -a "Tabbit Browser" || true
