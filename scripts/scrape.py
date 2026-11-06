@@ -12,6 +12,7 @@ import os
 import re
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone, timedelta
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -124,6 +125,69 @@ PRICE_RE = re.compile(r'RMB\s*([\d,]+)')
 ID_RE = re.compile(r'/shop/product/([A-Za-z0-9]+)')
 
 
+DETAIL_RAM_RE = re.compile(r'(\d+)\s*GB\s*统一内存')
+DETAIL_SSD_RE = re.compile(r'(\d+(?:\.\d+)?)\s*(TB|GB)\s*固态硬盘')
+UA = ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
+      '(KHTML, like Gecko) Chrome/120 Safari/537.36')
+
+
+def fetch_detail(url):
+    """抓商品详情页，补 memoryGB / storage。失败返回 (None, '')。"""
+    import urllib.request
+    req = urllib.request.Request(url, headers={'User-Agent': UA, 'Accept-Language': 'zh-CN,zh;q=0.9'})
+    with urllib.request.urlopen(req, timeout=25) as resp:
+        html = resp.read().decode('utf-8', 'replace')
+    text = re.sub(r'<[^>]+>', ' ', html)
+    text = re.sub(r'\s+', ' ', text)
+    ram = DETAIL_RAM_RE.search(text)
+    ssd = DETAIL_SSD_RE.search(text)
+    mem = int(ram.group(1)) if ram else None
+    storage = (ssd.group(1) + ssd.group(2)) if ssd else ''
+    return mem, storage
+
+
+def enrich(items, workers=8):
+    """并发补全缺失的内存/硬盘字段；只填值，不改结构。"""
+    todo = []
+    seen = set()
+    for it in items:
+        if it.get('memoryGB') and it.get('storage'):
+            continue
+        m = ID_RE.search(it.get('url', ''))
+        pid = m.group(1) if m else it.get('url')
+        if pid in seen:
+            continue
+        seen.add(pid)
+        todo.append((pid, it))
+    if not todo:
+        return {'filled': 0, 'total': 0}
+
+    def work(pair):
+        pid, it = pair
+        try:
+            mem, storage = fetch_detail(it['url'])
+            return pid, mem, storage, None
+        except Exception as exc:
+            return pid, None, '', str(exc)[:120]
+
+    results = {}
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for pid, mem, storage, err in pool.map(work, todo):
+            results[pid] = (mem, storage)
+    filled = 0
+    for it in items:
+        m = ID_RE.search(it.get('url', ''))
+        pid = m.group(1) if m else it.get('url')
+        mem, storage = results.get(pid, (None, ''))
+        if not it.get('memoryGB') and mem:
+            it['memoryGB'] = mem
+        if not it.get('storage') and storage:
+            it['storage'] = storage
+        if it.get('memoryGB') and it.get('storage'):
+            filled += 1
+    return {'filled': filled, 'total': len(items)}
+
+
 def parse_item(category, href, text, price_text=''):
     price_m = PRICE_RE.search(price_text or '') or PRICE_RE.search(text)
     if not price_m:
@@ -188,6 +252,11 @@ def main():
         seen.add(key)
         items.append(item)
     items.sort(key=lambda z: (z['category'], z['price']))
+    try:
+        enriched = enrich(items)
+        print(json.dumps({'enrich': enriched}, ensure_ascii=False))
+    except Exception as exc:
+        print(json.dumps({'enrich_error': str(exc)[:200]}, ensure_ascii=False))
     payload = {
         'date': day,
         'fetchedAt': now.isoformat(timespec='seconds'),
