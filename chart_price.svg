@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1140" height="420" viewBox="0 0 1140 420" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
 <rect width="1140" height="420" fill="#ffffff"/>
 <text x="78" y="26" font-size="15" font-weight="600" fill="#111827">苹果官翻 · 在售最低价走势（按配置组 TOP 12 + 其他）</text>
-<text x="852" y="26" font-size="11" fill="#6b7280">更新 2026-11-06</text>
+<text x="852" y="26" font-size="11" fill="#6b7280">更新 2026-11-07</text>
 <line x1="78" y1="374.0" x2="844" y2="374.0" stroke="#eef2f7"/>
 <text x="70" y="378.0" font-size="10" fill="#6b7280" text-anchor="end">¥1,259</text>
 <line x1="78" y1="309.6" x2="844" y2="309.6" stroke="#eef2f7"/>
@@ -14,20 +14,21 @@
 <text x="70" y="120.4" font-size="10" fill="#6b7280" text-anchor="end">¥27,883</text>
 <line x1="78" y1="52.0" x2="844" y2="52.0" stroke="#eef2f7"/>
 <text x="70" y="56.0" font-size="10" fill="#6b7280" text-anchor="end">¥34,539</text>
-<text x="461.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-06</text>
-<circle cx="461.0" cy="106.6" r="4" fill="#2563eb"/>
-<circle cx="461.0" cy="261.4" r="4" fill="#059669"/>
-<circle cx="461.0" cy="172.4" r="4" fill="#d97706"/>
-<circle cx="461.0" cy="268.2" r="4" fill="#dc2626"/>
-<circle cx="461.0" cy="148.2" r="4" fill="#7c3aed"/>
-<circle cx="461.0" cy="248.8" r="4" fill="#0891b2"/>
-<circle cx="461.0" cy="217.8" r="4" fill="#db2777"/>
-<circle cx="461.0" cy="144.3" r="4" fill="#65a30d"/>
-<circle cx="461.0" cy="283.6" r="4" fill="#ea580c"/>
-<circle cx="461.0" cy="286.5" r="4" fill="#4f46e5"/>
-<circle cx="461.0" cy="89.2" r="4" fill="#0d9488"/>
-<circle cx="461.0" cy="212.0" r="4" fill="#a16207"/>
-<circle cx="461.0" cy="336.8" r="4" fill="#6b7280"/>
+<text x="78.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-06</text>
+<text x="844.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-07</text>
+<polyline fill="none" stroke="#2563eb" stroke-width="2" points="78.0,106.6 844.0,106.6"/>
+<polyline fill="none" stroke="#059669" stroke-width="2" points="78.0,261.4 844.0,261.4"/>
+<polyline fill="none" stroke="#d97706" stroke-width="2" points="78.0,172.4 844.0,172.4"/>
+<polyline fill="none" stroke="#dc2626" stroke-width="2" points="78.0,268.2 844.0,268.2"/>
+<polyline fill="none" stroke="#7c3aed" stroke-width="2" points="78.0,148.2 844.0,148.2"/>
+<polyline fill="none" stroke="#0891b2" stroke-width="2" points="78.0,248.8 844.0,248.8"/>
+<polyline fill="none" stroke="#db2777" stroke-width="2" points="78.0,217.8 844.0,217.8"/>
+<polyline fill="none" stroke="#65a30d" stroke-width="2" points="78.0,144.3 844.0,144.3"/>
+<polyline fill="none" stroke="#ea580c" stroke-width="2" points="78.0,283.6 844.0,283.6"/>
+<polyline fill="none" stroke="#4f46e5" stroke-width="2" points="78.0,286.5 844.0,286.5"/>
+<polyline fill="none" stroke="#0d9488" stroke-width="2" points="78.0,89.2 844.0,89.2"/>
+<polyline fill="none" stroke="#a16207" stroke-width="2" points="78.0,212.0 844.0,212.0"/>
+<polyline fill="none" stroke="#6b7280" stroke-width="2" points="78.0,336.8 844.0,336.8"/>
 <rect x="854" y="58" width="10" height="10" rx="2" fill="#2563eb"/>
 <text x="870" y="67" font-size="10" fill="#374151">MacBook Pro M5 Max 18/32 36GB/2TB ¥28,899</text>
 <rect x="854" y="78" width="10" height="10" rx="2" fill="#059669"/>
