@@ -64,7 +64,9 @@ fi
 # 放在"无变化提前 exit 0"分支之前，保证幂等分支（当日快照已存在）也产出简报。
 # 简报失败不算致命：打 WARN 到 stderr 后继续提交推送，退出码仍只反映 pipeline 成败。
 OUT_DIR="${REFURB_OUT_DIR:-$HOME/.dsh/bot/workspace/pm/refurb/out}"
-if report_text=$(/usr/bin/python3 scripts/report.py 2>/dev/null); then
+# stderr 落临时文件：失败时能把原文带进日志，便于区分脚本崩/数据坏/权限问题。
+report_err_file=$(/usr/bin/mktemp -t refurb-report-err)
+if report_text=$(/usr/bin/python3 scripts/report.py 2>"$report_err_file"); then
   if ! /bin/mkdir -p "$OUT_DIR"; then
     echo "WARN: 简报生成失败 — 无法创建输出目录 $OUT_DIR" >&2
   else
@@ -79,6 +81,13 @@ if report_text=$(/usr/bin/python3 scripts/report.py 2>/dev/null); then
 else
   echo "WARN: 简报生成失败 — report.py 退出码非 0" >&2
 fi
+# 成功但 stderr 非空也要留痕；失败时便于区分脚本崩/数据坏/权限问题。限长 2000 字节。
+report_err=$(/usr/bin/head -c 2000 "$report_err_file")
+if [ -n "$report_err" ]; then
+  echo "WARN: report.py stderr — $report_err" >&2
+fi
+# 成功/失败两条路径都会走到这里，删掉 stderr 临时文件。
+/bin/rm -f "$report_err_file"
 
 /usr/bin/git add -A || fail "暂存" "git add -A 失败"
 if /usr/bin/git diff --cached --quiet; then
