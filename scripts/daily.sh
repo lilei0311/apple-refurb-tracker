@@ -3,7 +3,7 @@
 # 环境变量：
 #   FORCE=1  忽略"当日已有快照"检查，强制重新抓取一次。
 set -euo pipefail
-cd "$(dirname "$0")/.."
+cd "$(/usr/bin/dirname "$0")/.."
 
 TODAY=$(date +%F)
 FORCE=${FORCE:-0}
@@ -22,10 +22,10 @@ trap 'fail "未捕获错误" "第 ${LINENO} 行命令失败: ${BASH_COMMAND}"' E
 push_with_retry() {
   local attempt=1 max=5 delay=1 head remote_head
   while :; do
-    if git push origin HEAD; then
-      head=$(git rev-parse HEAD) \
+    if /usr/bin/git push origin HEAD; then
+      head=$(/usr/bin/git rev-parse HEAD) \
         || fail "校验远端" "git rev-parse HEAD 失败"
-      remote_head=$(git ls-remote origin refs/heads/main 2>&1 | awk '{print $1}') \
+      remote_head=$(/usr/bin/git ls-remote origin refs/heads/main 2>&1 | /usr/bin/awk '{print $1}') \
         || fail "校验远端" "git ls-remote 读取远端 HEAD 失败"
       if [ "$head" = "$remote_head" ]; then
         return 0
@@ -50,23 +50,43 @@ if [ "$FORCE" != "1" ] && [ -f "data/$TODAY.json" ]; then
 fi
 
 if [ "$SKIP_SCRAPE" = "0" ]; then
-  if ! pgrep -f "Tabbit Browser.app/Contents/MacOS/Tabbit Browser" >/dev/null 2>&1; then
+  if ! /usr/bin/pgrep -f "Tabbit Browser.app/Contents/MacOS/Tabbit Browser" >/dev/null 2>&1; then
     echo "Tabbit 未运行，尝试启动…"
-    open -a "Tabbit Browser" || true
+    /usr/bin/open -a "Tabbit Browser" || true
     sleep 8
   fi
-  python3 scripts/scrape.py || fail "抓取" "scrape.py 退出码非 0"
+  /usr/bin/python3 scripts/scrape.py || fail "抓取" "scrape.py 退出码非 0"
 fi
 
-python3 scripts/render.py || fail "渲染" "render.py 退出码非 0"
+/usr/bin/python3 scripts/render.py || fail "渲染" "render.py 退出码非 0"
 
-git add -A || fail "暂存" "git add -A 失败"
-if git diff --cached --quiet; then
+# 简报落盘：模型回合缺席（如 429 额度耗尽）时，人和脚本都能直接读这份文件。
+# 放在"无变化提前 exit 0"分支之前，保证幂等分支（当日快照已存在）也产出简报。
+# 简报失败不算致命：打 WARN 到 stderr 后继续提交推送，退出码仍只反映 pipeline 成败。
+OUT_DIR="${REFURB_OUT_DIR:-$HOME/.dsh/bot/workspace/pm/refurb/out}"
+if report_text=$(/usr/bin/python3 scripts/report.py 2>/dev/null); then
+  if ! /bin/mkdir -p "$OUT_DIR"; then
+    echo "WARN: 简报生成失败 — 无法创建输出目录 $OUT_DIR" >&2
+  else
+    {
+      echo "# 苹果官翻库存 · 每日简报（${TODAY}）"
+      echo "- 生成时间：$(date '+%Y-%m-%d %H:%M:%S')"
+      echo
+      printf '%s\n' "$report_text"
+    } > "$OUT_DIR/latest-report.md" \
+      || echo "WARN: 简报生成失败 — 无法写入 $OUT_DIR/latest-report.md" >&2
+  fi
+else
+  echo "WARN: 简报生成失败 — report.py 退出码非 0" >&2
+fi
+
+/usr/bin/git add -A || fail "暂存" "git add -A 失败"
+if /usr/bin/git diff --cached --quiet; then
   echo "无变化（渲染产物与仓库一致），无需提交推送"
   exit 0
 fi
 
-git -c user.name=lilei0311 -c user.email=lilei0311@users.noreply.github.com \
+/usr/bin/git -c user.name=lilei0311 -c user.email=lilei0311@users.noreply.github.com \
     commit -m "data: ${TODAY} 官翻库存快照" >/dev/null \
   || fail "提交" "git commit 失败"
 push_with_retry
