@@ -18,6 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_DATA = os.path.join(ROOT, 'data')
 MODELS = ['Mac Studio', 'Mac mini', 'MacBook Pro']
 MAX_LIST = 5  # 新上架/下架最多展示的条数
+MIN_MAJOR_CHANGE = 2  # 配置级变化达到该数量才算"明显"（可调，但默认 2）
 
 
 def parse_date(s):
@@ -66,6 +67,24 @@ def group_by_config(items):
             g['min'] = p if g['min'] is None else min(g['min'], p)
             g['max'] = p if g['max'] is None else max(g['max'], p)
     return out
+
+
+def model_counts(grouped):
+    """型号级聚合：型号键 = (category, chip)，型号条数 = 该型号下所有配置的 count 之和。"""
+    counts = {}
+    for (cat, chip, _cpu, _gpu, _mem, _sto), g in grouped.items():
+        key = (cat, chip)
+        counts[key] = counts.get(key, 0) + g['count']
+    return counts
+
+
+def model_list(models):
+    """型号显示名列表（category + ' ' + chip），最多列 2 个，多了写"等共 N 款"。"""
+    names = [f"{cat} {chip}" for cat, chip in sorted(models)]
+    txt = '、'.join(names[:2])
+    if len(names) > 2:
+        txt += f" 等共 {len(names)} 款"
+    return txt
 
 
 def price_text(g):
@@ -173,13 +192,35 @@ def build_report(data_dir):
             changes = changes[:MAX_LIST] + [f"等共 {len(changes)} 款"]
         change_txt = '；'.join(changes) if changes else '无'
 
-        # 一句话判断：新上架多于下架 → 偏补货；下架多于新上架 → 偏售罄；否则平稳
-        if len(new_keys) > len(gone_keys):
-            verdict = '偏补货'
-        elif len(gone_keys) > len(new_keys):
-            verdict = '偏售罄'
+        # 一句话判断：先型号级（型号在售归零/新上架 = 强信号），再配置级（数量 ≥2 才算明显）
+        cur_mc = model_counts(cur)
+        prev_mc = model_counts(prev)
+        vanished_models = sorted(k for k in prev_mc if cur_mc.get(k, 0) == 0)
+        appeared_models = sorted(k for k in cur_mc if prev_mc.get(k, 0) == 0)
+
+        note = None
+        if vanished_models or appeared_models:
+            if len(appeared_models) > len(vanished_models):
+                verdict = '偏补货'
+                note = f"{model_list(appeared_models)} 型号新上架"
+            elif len(vanished_models) > len(appeared_models):
+                verdict = '偏售罄'
+                note = f"{model_list(vanished_models)} 型号在售归零"
+            else:
+                verdict = '平稳'
+                note = f"{model_list(vanished_models + appeared_models)} 型号有进出"
         else:
-            verdict = '平稳'
+            if len(new_keys) >= MIN_MAJOR_CHANGE and len(new_keys) > len(gone_keys):
+                verdict = '偏补货'
+            elif len(gone_keys) >= MIN_MAJOR_CHANGE and len(gone_keys) > len(new_keys):
+                verdict = '偏售罄'
+            else:
+                verdict = '平稳'
+                if new_keys or gone_keys:
+                    note = '配置小幅变动'
+                elif changes:
+                    note = '价格有变动'
+
         extra = []
         if new_keys:
             extra.append(f"新上架 {len(new_keys)} 款")
@@ -187,9 +228,12 @@ def build_report(data_dir):
             extra.append(f"下架 {len(gone_keys)} 款")
         if changes:
             extra.append(f"{len(changes)} 款调价")
-        reason = '，'.join(extra) if extra else '配置与价格均无变化'
-        if verdict == '平稳' and changes:
-            verdict = '平稳（价格有变动）'
+        if note is None:
+            reason = '，'.join(extra) if extra else '配置与价格均无变化'
+        elif note in ('配置小幅变动', '价格有变动'):
+            reason = note + ('：' + '，'.join(extra) if extra else '')
+        else:  # 型号级说明：逗号衔接，保留原计数信息
+            reason = note + ('，' + '，'.join(extra) if extra else '')
 
         lines = [
             f"**{today_str[5:]}** 在售 {len(today_items)} 条（按条数降序）：{cat_txt}（{base_note}）",
