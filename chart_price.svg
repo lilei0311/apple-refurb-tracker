@@ -1,35 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1140" height="420" viewBox="0 0 1140 420" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
 <rect width="1140" height="420" fill="#ffffff"/>
 <text x="78" y="26" font-size="15" font-weight="600" fill="#111827">苹果官翻 · 在售最低价走势（按配置组 TOP 12 + 其他）</text>
-<text x="852" y="26" font-size="11" fill="#6b7280">更新 2026-11-09</text>
+<text x="852" y="26" font-size="11" fill="#6b7280">更新 2026-11-12</text>
 <line x1="78" y1="374.0" x2="844" y2="374.0" stroke="#eef2f7"/>
-<text x="70" y="378.0" font-size="10" fill="#6b7280" text-anchor="end">¥1,259</text>
+<text x="70" y="378.0" font-size="10" fill="#6b7280" text-anchor="end">¥644</text>
 <line x1="78" y1="309.6" x2="844" y2="309.6" stroke="#eef2f7"/>
-<text x="70" y="313.6" font-size="10" fill="#6b7280" text-anchor="end">¥7,915</text>
+<text x="70" y="313.6" font-size="10" fill="#6b7280" text-anchor="end">¥8,366</text>
 <line x1="78" y1="245.2" x2="844" y2="245.2" stroke="#eef2f7"/>
-<text x="70" y="249.2" font-size="10" fill="#6b7280" text-anchor="end">¥14,571</text>
+<text x="70" y="249.2" font-size="10" fill="#6b7280" text-anchor="end">¥16,088</text>
 <line x1="78" y1="180.8" x2="844" y2="180.8" stroke="#eef2f7"/>
-<text x="70" y="184.8" font-size="10" fill="#6b7280" text-anchor="end">¥21,227</text>
+<text x="70" y="184.8" font-size="10" fill="#6b7280" text-anchor="end">¥23,810</text>
 <line x1="78" y1="116.4" x2="844" y2="116.4" stroke="#eef2f7"/>
-<text x="70" y="120.4" font-size="10" fill="#6b7280" text-anchor="end">¥27,883</text>
+<text x="70" y="120.4" font-size="10" fill="#6b7280" text-anchor="end">¥31,532</text>
 <line x1="78" y1="52.0" x2="844" y2="52.0" stroke="#eef2f7"/>
-<text x="70" y="56.0" font-size="10" fill="#6b7280" text-anchor="end">¥34,539</text>
+<text x="70" y="56.0" font-size="10" fill="#6b7280" text-anchor="end">¥39,254</text>
 <text x="78.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-06</text>
-<text x="461.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-07</text>
-<text x="844.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-09</text>
-<polyline fill="none" stroke="#2563eb" stroke-width="2" points="78.0,106.6 461.0,106.6 844.0,106.6"/>
-<polyline fill="none" stroke="#059669" stroke-width="2" points="78.0,261.4 461.0,261.4 844.0,261.4"/>
-<polyline fill="none" stroke="#d97706" stroke-width="2" points="78.0,172.4 461.0,172.4 844.0,172.4"/>
-<polyline fill="none" stroke="#dc2626" stroke-width="2" points="78.0,268.2 461.0,268.2 844.0,268.2"/>
-<polyline fill="none" stroke="#7c3aed" stroke-width="2" points="78.0,148.2 461.0,148.2 844.0,148.2"/>
-<polyline fill="none" stroke="#0891b2" stroke-width="2" points="78.0,248.8 461.0,248.8 844.0,248.8"/>
-<polyline fill="none" stroke="#db2777" stroke-width="2" points="78.0,217.8 461.0,217.8 844.0,217.8"/>
-<polyline fill="none" stroke="#65a30d" stroke-width="2" points="78.0,144.3 461.0,144.3 844.0,144.3"/>
-<polyline fill="none" stroke="#ea580c" stroke-width="2" points="78.0,283.6 461.0,283.6 844.0,283.6"/>
-<polyline fill="none" stroke="#4f46e5" stroke-width="2" points="78.0,286.5 461.0,286.5 844.0,286.5"/>
-<polyline fill="none" stroke="#0d9488" stroke-width="2" points="78.0,89.2 461.0,89.2 844.0,89.2"/>
-<polyline fill="none" stroke="#a16207" stroke-width="2" points="78.0,212.0 461.0,212.0 844.0,212.0"/>
-<polyline fill="none" stroke="#6b7280" stroke-width="2" points="78.0,336.8 461.0,336.8 844.0,336.8"/>
+<text x="333.3" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-07</text>
+<text x="588.7" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-09</text>
+<text x="844.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-12</text>
+<polyline fill="none" stroke="#2563eb" stroke-width="2" points="78.0,138.4 333.3,138.4 588.7,138.4 844.0,138.4"/>
+<polyline fill="none" stroke="#059669" stroke-width="2" points="78.0,271.8 333.3,271.8 588.7,271.8 844.0,271.8"/>
+<polyline fill="none" stroke="#d97706" stroke-width="2" points="78.0,195.1 333.3,195.1 588.7,195.1 844.0,195.1"/>
+<polyline fill="none" stroke="#dc2626" stroke-width="2" points="78.0,277.6 333.3,277.6 588.7,277.6 844.0,277.6"/>
+<polyline fill="none" stroke="#7c3aed" stroke-width="2" points="78.0,174.2 333.3,174.2 588.7,174.2 844.0,174.2"/>
+<polyline fill="none" stroke="#0891b2" stroke-width="2" points="78.0,170.9 333.3,170.9 588.7,170.9 844.0,170.9"/>
+<polyline fill="none" stroke="#db2777" stroke-width="2" points="78.0,89.2 333.3,89.2 588.7,89.2 844.0,98.3"/>
+<polyline fill="none" stroke="#65a30d" stroke-width="2" points="78.0,237.6 333.3,237.6 588.7,237.6 844.0,237.6"/>
+<polyline fill="none" stroke="#ea580c" stroke-width="2" points="78.0,261.0 333.3,261.0 588.7,261.0 844.0,261.0"/>
+<polyline fill="none" stroke="#4f46e5" stroke-width="2" points="78.0,234.3 333.3,234.3 588.7,234.3 844.0,234.3"/>
+<polyline fill="none" stroke="#0d9488" stroke-width="2" points="78.0,293.5 333.3,293.5 588.7,293.5 844.0,293.5"/>
+<polyline fill="none" stroke="#a16207" stroke-width="2" points="78.0,123.3 333.3,123.3 588.7,123.3 844.0,123.3"/>
+<polyline fill="none" stroke="#6b7280" stroke-width="2" points="78.0,336.8 333.3,336.8 588.7,336.8 844.0,336.8"/>
 <rect x="854" y="58" width="10" height="10" rx="2" fill="#2563eb"/>
 <text x="870" y="67" font-size="10" fill="#374151">MacBook Pro M5 Max 18/32 36GB/2TB ¥28,899</text>
 <rect x="854" y="78" width="10" height="10" rx="2" fill="#059669"/>
@@ -41,20 +42,20 @@
 <rect x="854" y="138" width="10" height="10" rx="2" fill="#7c3aed"/>
 <text x="870" y="147" font-size="10" fill="#374151">MacBook Pro M4 Max 14/32 36GB/1TB ¥24,599</text>
 <rect x="854" y="158" width="10" height="10" rx="2" fill="#0891b2"/>
-<text x="870" y="167" font-size="10" fill="#374151">MacBook Pro M5 10/10 24GB/1TB ¥14,199</text>
+<text x="870" y="167" font-size="10" fill="#374151">MacBook Pro M5 10/10 32GB/4TB ¥24,999</text>
 <rect x="854" y="178" width="10" height="10" rx="2" fill="#db2777"/>
-<text x="870" y="187" font-size="10" fill="#374151">MacBook Pro M5 10/10 24GB/2TB ¥17,399</text>
+<text x="870" y="187" font-size="10" fill="#374151">MacBook Pro M5 Max 18/40 48GB/2TB ¥33,699</text>
 <rect x="854" y="198" width="10" height="10" rx="2" fill="#65a30d"/>
-<text x="870" y="207" font-size="10" fill="#374151">MacBook Pro M5 10/10 32GB/4TB ¥24,999</text>
+<text x="870" y="207" font-size="10" fill="#374151">MacBook Pro M5 Pro 15/16 24GB/1TB ¥16,999</text>
 <rect x="854" y="218" width="10" height="10" rx="2" fill="#ea580c"/>
-<text x="870" y="227" font-size="10" fill="#374151">Mac mini M4 Pro 12/16 24GB/512GB ¥10,599</text>
+<text x="870" y="227" font-size="10" fill="#374151">MacBook Pro M5 10/10 24GB/1TB ¥14,199</text>
 <rect x="854" y="238" width="10" height="10" rx="2" fill="#4f46e5"/>
-<text x="870" y="247" font-size="10" fill="#374151">MacBook Pro M4 10/10 16GB/512GB ¥10,299</text>
+<text x="870" y="247" font-size="10" fill="#374151">MacBook Pro M5 10/10 24GB/2TB ¥17,399</text>
 <rect x="854" y="258" width="10" height="10" rx="2" fill="#0d9488"/>
-<text x="870" y="267" font-size="10" fill="#374151">MacBook Pro M4 Max 16/40 48GB/1TB ¥30,699</text>
+<text x="870" y="267" font-size="10" fill="#374151">MacBook Pro M4 10/10 16GB/512GB ¥10,299</text>
 <rect x="854" y="278" width="10" height="10" rx="2" fill="#a16207"/>
-<text x="870" y="287" font-size="10" fill="#374151">MacBook Pro M4 Pro 14/20 24GB/1TB ¥17,999</text>
+<text x="870" y="287" font-size="10" fill="#374151">MacBook Pro M4 Max 16/40 48GB/1TB ¥30,699</text>
 <rect x="854" y="298" width="10" height="10" rx="2" fill="#6b7280"/>
-<text x="870" y="307" font-size="10" fill="#374151">其他（19 组） ¥5,099</text>
+<text x="870" y="307" font-size="10" fill="#374151">其他（21 组） ¥5,099</text>
 <text x="78" y="410" font-size="10" fill="#9ca3af">注：按配置分组，仅展示最近一天在售数量 TOP 12，其余聚合为「其他」；曲线断点表示当日该配置无在售翻新机。</text>
 </svg>
