@@ -77,7 +77,13 @@ def run_page(url, tag):
     if not payload:
         raise RuntimeError(f'tabbit-cli 输出无法解析: {(r.stdout or "")[:300]}')
     result = payload.get('result') or {}
-    if result.get('resourceId'):
+    # Tabbit ≥1.22：大结果改写本地文件，通过 nextAction.read_file 或 result.path 给出路径
+    na = result.get('nextAction') or {}
+    file_path = na.get('path') if na.get('type') == 'read_file' else result.get('path')
+    if file_path and os.path.exists(file_path):
+        with open(file_path) as f:
+            data = json.load(f)
+    elif result.get('resourceId'):
         parts, offset = [], 0
         for _ in range(10):
             rr = subprocess.run(
