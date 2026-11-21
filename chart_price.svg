@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1140" height="420" viewBox="0 0 1140 420" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif">
 <rect width="1140" height="420" fill="#ffffff"/>
 <text x="78" y="26" font-size="15" font-weight="600" fill="#111827">苹果官翻 · 在售最低价走势（按配置组 TOP 12 + 其他）</text>
-<text x="852" y="26" font-size="11" fill="#6b7280">更新 2026-11-20</text>
+<text x="852" y="26" font-size="11" fill="#6b7280">更新 2026-11-21</text>
 <line x1="78" y1="374.0" x2="844" y2="374.0" stroke="#eef2f7"/>
 <text x="70" y="378.0" font-size="10" fill="#6b7280" text-anchor="end">¥644</text>
 <line x1="78" y1="309.6" x2="844" y2="309.6" stroke="#eef2f7"/>
@@ -15,29 +15,30 @@
 <line x1="78" y1="52.0" x2="844" y2="52.0" stroke="#eef2f7"/>
 <text x="70" y="56.0" font-size="10" fill="#6b7280" text-anchor="end">¥39,254</text>
 <text x="78.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-06</text>
-<text x="154.6" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-07</text>
-<text x="231.2" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-09</text>
-<text x="307.8" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-12</text>
-<text x="384.4" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-13</text>
-<text x="461.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-14</text>
-<text x="537.6" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-15</text>
-<text x="614.2" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-16</text>
-<text x="690.8" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-17</text>
-<text x="767.4" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-18</text>
-<text x="844.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-20</text>
-<polyline fill="none" stroke="#2563eb" stroke-width="2" points="78.0,138.4 154.6,138.4 231.2,138.4 307.8,138.4 384.4,138.4 461.0,138.4 537.6,138.4 614.2,138.4 690.8,138.4 767.4,138.4 844.0,138.4"/>
-<polyline fill="none" stroke="#059669" stroke-width="2" points="78.0,271.8 154.6,271.8 231.2,271.8 307.8,271.8 384.4,271.8 461.0,271.8 537.6,271.8 614.2,271.8 690.8,271.8 767.4,271.8 844.0,271.8"/>
-<polyline fill="none" stroke="#d97706" stroke-width="2" points="78.0,195.1 154.6,195.1 231.2,195.1 307.8,195.1 384.4,195.1 461.0,195.1 537.6,195.1 614.2,195.1 690.8,195.1 767.4,195.1 844.0,195.1"/>
-<polyline fill="none" stroke="#dc2626" stroke-width="2" points="78.0,277.6 154.6,277.6 231.2,277.6 307.8,277.6 384.4,277.6 461.0,277.6 537.6,277.6 614.2,277.6 690.8,277.6 767.4,277.6 844.0,277.6"/>
-<polyline fill="none" stroke="#7c3aed" stroke-width="2" points="78.0,174.2 154.6,174.2 231.2,174.2 307.8,174.2 384.4,174.2 461.0,174.2 537.6,174.2 614.2,174.2 690.8,174.2 767.4,174.2 844.0,174.2"/>
-<polyline fill="none" stroke="#0891b2" stroke-width="2" points="78.0,170.9 154.6,170.9 231.2,170.9 307.8,170.9 384.4,170.9 461.0,170.9 537.6,170.9 614.2,170.9 690.8,170.9 767.4,170.9 844.0,170.9"/>
-<polyline fill="none" stroke="#db2777" stroke-width="2" points="78.0,237.6 154.6,237.6 231.2,237.6 307.8,237.6 384.4,237.6 461.0,237.6 537.6,237.6 614.2,237.6 690.8,237.6 767.4,237.6 844.0,237.6"/>
-<polyline fill="none" stroke="#65a30d" stroke-width="2" points="78.0,261.0 154.6,261.0 231.2,261.0 307.8,261.0 384.4,261.0 461.0,261.0 537.6,261.0 614.2,261.0 690.8,261.0 767.4,261.0 844.0,261.0"/>
-<polyline fill="none" stroke="#ea580c" stroke-width="2" points="78.0,234.3 154.6,234.3 231.2,234.3 307.8,234.3 384.4,234.3 461.0,234.3 537.6,234.3 614.2,234.3 690.8,234.3 767.4,234.3 844.0,234.3"/>
-<polyline fill="none" stroke="#4f46e5" stroke-width="2" points="78.0,89.2 154.6,89.2 231.2,89.2 307.8,98.3 384.4,98.3 461.0,98.3 537.6,89.2 614.2,89.2 690.8,89.2 767.4,89.2 844.0,89.2"/>
-<polyline fill="none" stroke="#0d9488" stroke-width="2" points="78.0,202.6 154.6,202.6 231.2,202.6 307.8,202.6 384.4,202.6 461.0,202.6 537.6,202.6 614.2,202.6 690.8,219.3 767.4,219.3 844.0,202.6"/>
-<polyline fill="none" stroke="#a16207" stroke-width="2" points="78.0,293.5 154.6,293.5 231.2,293.5 307.8,293.5 384.4,293.5 461.0,293.5 537.6,293.5 614.2,293.5 690.8,293.5 767.4,293.5 844.0,293.5"/>
-<polyline fill="none" stroke="#6b7280" stroke-width="2" points="78.0,336.8 154.6,336.8 231.2,336.8 307.8,336.8 384.4,336.8 461.0,336.8 537.6,336.8 614.2,336.8 690.8,336.8 767.4,336.8 844.0,336.8"/>
+<text x="147.6" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-07</text>
+<text x="217.3" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-09</text>
+<text x="286.9" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-12</text>
+<text x="356.5" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-13</text>
+<text x="426.2" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-14</text>
+<text x="495.8" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-15</text>
+<text x="565.5" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-16</text>
+<text x="635.1" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-17</text>
+<text x="704.7" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-18</text>
+<text x="774.4" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-20</text>
+<text x="844.0" y="394" font-size="10" fill="#6b7280" text-anchor="middle">11-21</text>
+<polyline fill="none" stroke="#2563eb" stroke-width="2" points="78.0,138.4 147.6,138.4 217.3,138.4 286.9,138.4 356.5,138.4 426.2,138.4 495.8,138.4 565.5,138.4 635.1,138.4 704.7,138.4 774.4,138.4 844.0,138.4"/>
+<polyline fill="none" stroke="#059669" stroke-width="2" points="78.0,271.8 147.6,271.8 217.3,271.8 286.9,271.8 356.5,271.8 426.2,271.8 495.8,271.8 565.5,271.8 635.1,271.8 704.7,271.8 774.4,271.8 844.0,271.8"/>
+<polyline fill="none" stroke="#d97706" stroke-width="2" points="78.0,195.1 147.6,195.1 217.3,195.1 286.9,195.1 356.5,195.1 426.2,195.1 495.8,195.1 565.5,195.1 635.1,195.1 704.7,195.1 774.4,195.1 844.0,195.1"/>
+<polyline fill="none" stroke="#dc2626" stroke-width="2" points="78.0,277.6 147.6,277.6 217.3,277.6 286.9,277.6 356.5,277.6 426.2,277.6 495.8,277.6 565.5,277.6 635.1,277.6 704.7,277.6 774.4,277.6 844.0,277.6"/>
+<polyline fill="none" stroke="#7c3aed" stroke-width="2" points="78.0,174.2 147.6,174.2 217.3,174.2 286.9,174.2 356.5,174.2 426.2,174.2 495.8,174.2 565.5,174.2 635.1,174.2 704.7,174.2 774.4,174.2 844.0,174.2"/>
+<polyline fill="none" stroke="#0891b2" stroke-width="2" points="78.0,170.9 147.6,170.9 217.3,170.9 286.9,170.9 356.5,170.9 426.2,170.9 495.8,170.9 565.5,170.9 635.1,170.9 704.7,170.9 774.4,170.9 844.0,170.9"/>
+<polyline fill="none" stroke="#db2777" stroke-width="2" points="78.0,237.6 147.6,237.6 217.3,237.6 286.9,237.6 356.5,237.6 426.2,237.6 495.8,237.6 565.5,237.6 635.1,237.6 704.7,237.6 774.4,237.6 844.0,237.6"/>
+<polyline fill="none" stroke="#65a30d" stroke-width="2" points="78.0,261.0 147.6,261.0 217.3,261.0 286.9,261.0 356.5,261.0 426.2,261.0 495.8,261.0 565.5,261.0 635.1,261.0 704.7,261.0 774.4,261.0 844.0,261.0"/>
+<polyline fill="none" stroke="#ea580c" stroke-width="2" points="78.0,234.3 147.6,234.3 217.3,234.3 286.9,234.3 356.5,234.3 426.2,234.3 495.8,234.3 565.5,234.3 635.1,234.3 704.7,234.3 774.4,234.3 844.0,234.3"/>
+<polyline fill="none" stroke="#4f46e5" stroke-width="2" points="78.0,89.2 147.6,89.2 217.3,89.2 286.9,98.3 356.5,98.3 426.2,98.3 495.8,89.2 565.5,89.2 635.1,89.2 704.7,89.2 774.4,89.2 844.0,89.2"/>
+<polyline fill="none" stroke="#0d9488" stroke-width="2" points="78.0,202.6 147.6,202.6 217.3,202.6 286.9,202.6 356.5,202.6 426.2,202.6 495.8,202.6 565.5,202.6 635.1,219.3 704.7,219.3 774.4,202.6 844.0,202.6"/>
+<polyline fill="none" stroke="#a16207" stroke-width="2" points="78.0,293.5 147.6,293.5 217.3,293.5 286.9,293.5 356.5,293.5 426.2,293.5 495.8,293.5 565.5,293.5 635.1,293.5 704.7,293.5 774.4,293.5 844.0,293.5"/>
+<polyline fill="none" stroke="#6b7280" stroke-width="2" points="78.0,336.8 147.6,336.8 217.3,336.8 286.9,336.8 356.5,336.8 426.2,336.8 495.8,336.8 565.5,336.8 635.1,336.8 704.7,336.8 774.4,336.8 844.0,336.8"/>
 <rect x="854" y="58" width="10" height="10" rx="2" fill="#2563eb"/>
 <text x="870" y="67" font-size="10" fill="#374151">MacBook Pro M5 Max 18/32 36GB/2TB ¥28,899</text>
 <rect x="854" y="78" width="10" height="10" rx="2" fill="#059669"/>
